@@ -122,4 +122,9 @@ public class PlayerController : MonoBehaviour
 
         wasBallThrown = false;
     }
+
+    public void StartThrow()
+   {
+        spawnBall();
+   }
 }
