@@ -6,23 +6,23 @@ public class Ball : MonoBehaviour
 
     private void Start()
     {
-       gameManager = FindAnyObjectByType<GameManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
     }
 
-     private void OnCollisionEnter(Collision collision)
-{
-    if (collision.gameObject.CompareTag("Pin"))
+    private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Ball hit a pin: " + collision.gameObject.name);
+        if (collision.gameObject.CompareTag("Pin"))
+        {
+            Debug.Log("Ball hit a pin: " + collision.gameObject.name);
+        }
     }
-}
 
-private void OnTriggerEnter(Collider other)
-{
-    if (other.CompareTag("Pit"))
+    private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Ball fell into the pit");
-        gameManager.SetNextThrow();
+        if (other.CompareTag("Pit"))
+        {
+            gameManager.SetNextThrow();
+            Destroy(gameObject);
+        }
     }
 }
- }
