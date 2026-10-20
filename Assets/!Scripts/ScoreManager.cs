@@ -3,6 +3,8 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
+
+    //create a var for our UI manager so this script can access its methods 
     [SerializeField] private UIManager uiManager;
 
     private int[] frameScores = new int[10];
@@ -15,6 +17,8 @@ public class ScoreManager : MonoBehaviour
 
     public void SetFrameScore(int fallenPins)
     {
+
+        //pass the required values into our UI Manager script to prefrom the functions with these values 
         uiManager.SetFrameValue(currentFrame, currentThrow, fallenPins);
 
         if (hasSpareBonus)
@@ -34,7 +38,9 @@ public class ScoreManager : MonoBehaviour
 
         if (currentFrame == 9)
         {
+            //use the method to score last frame rather then the first 9 frames 
             ScoreLastFrame(fallenPins);
+            //return so that we do not use any other functions from this method 
             return;
         }
 
@@ -65,10 +71,14 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    //method to score final frame only 
     private void ScoreLastFrame(int fallenPins)
     {
+
+        //check if on throw 1 
         if (currentThrow == 1)
         {
+            //check if throw 1 = strike
             if (fallenPins == 10)
             {
                 Debug.Log("Strike!");
@@ -78,12 +88,17 @@ public class ScoreManager : MonoBehaviour
 
             currentThrow++;
         }
+
+        //check if throw 2
         else if (currentThrow == 2)
         {
+            //take total score of frame and subtract value from second throw 
             int firstThrow = frameScores[currentFrame] - fallenPins;
 
+            //if first throw = 10 we got strike 
             if (firstThrow == 10)
             {
+                //now we check value of second throw on its own to see if we got strike
                 if (fallenPins == 10)
                 {
                     Debug.Log("Strike!");
@@ -93,6 +108,7 @@ public class ScoreManager : MonoBehaviour
 
                 currentThrow++;
             }
+            //if our first trow does not = 10 they we have to check if the value for our first 2 throws = 10 if so we got a spare and should display the spare message 
             else if (frameScores[currentFrame] == 10)
             {
                 Debug.Log("Spare!");
@@ -100,19 +116,23 @@ public class ScoreManager : MonoBehaviour
                 gameManager.ResetAllPins();
                 currentThrow++;
             }
+            //if we dint hit spare we go next frame 
             else
             {
                 NextFrame();
             }
         }
+
+        //checkls if we are on last throw (throw 3)
         else
         {
+            //checks if we got strike on throw 3 
             if (fallenPins == 10)
             {
                 Debug.Log("Strike!");
                 uiManager.ShowStrike();
             }
-
+            //goes to next frame and ends the game 
             NextFrame();
         }
     }
