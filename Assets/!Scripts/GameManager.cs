@@ -8,10 +8,15 @@ public class GameManager : MonoBehaviour
     //add ref 
     [SerializeField] private UIManager uiManager;
 
+    [SerializeField] private Camera mainCam;
+    [SerializeField] private Camera closeRangeCam;
+    [SerializeField] private float closeCamTime = 3f;
+
 
     [SerializeField] private Pin[] pins;
     [SerializeField] private float settleDelay = 2f;
-
+    [SerializeField] private SoundManager soundManager;
+    
     public void SetNextThrow()
     {
         Invoke(nameof(ProcessThrow), settleDelay);
@@ -39,6 +44,7 @@ public class GameManager : MonoBehaviour
         //once we reach the last frame of the game we want to show the game over screen with our final values and return out of the method so we dont start another throw. 
         if (currentFrame >= frameTotals.Length)
         {
+            soundManager.PlaySound("GameOver");
             uiManager.ShowGameOver(scoreManager.CalculateTotalScore());
             return;
         }
@@ -62,9 +68,25 @@ public class GameManager : MonoBehaviour
 
     public void ResetAllPins()
     {
+        soundManager.PlaySound("Reset");
         foreach (Pin pin in pins)
         {
             pin.ResetPin();
         }
+    }
+
+    public void showCloseup()
+    {
+        mainCam.enabled = false;
+
+        closeRangeCam.enabled = true;
+
+        Invoke(nameof(ShowMainCam), closeCamTime);
+    }
+
+    private void ShowMainCam()
+    {
+        closeRangeCam.enabled = false;
+        mainCam.enabled = true;
     }
 }

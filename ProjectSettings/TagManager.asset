@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Pin
   - Pit
+  - CamTrigger
   layers:
   - Default
   - TransparentFX
